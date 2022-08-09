@@ -27,8 +27,13 @@ export default {
   },
   data() {
     return {
-      image_load: false
+      image_load: false,
+      isWatched: false,
+      isLiked: false,
     };
+  },
+  methods:{
+
   },
   props: {
     recipe: {

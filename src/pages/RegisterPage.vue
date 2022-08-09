@@ -20,8 +20,8 @@
         <b-form-invalid-feedback v-else-if="!$v.form.username.length">
           Username length should be between 3-8 characters long
         </b-form-invalid-feedback>
-        <b-form-invalid-feedback v-if="!$v.form.username.alpha">
-          Username alpha
+        <b-form-invalid-feedback v-if="!$v.form.username.onlyLetters">
+          User name must be in english letters
         </b-form-invalid-feedback>
       </b-form-group>
 
@@ -37,6 +37,7 @@
           :options="countries"
           :state="validateState('country')"
         ></b-form-select>
+        <!-- <option value disabled selected>Select your country</option> -->
         <b-form-invalid-feedback>
           Country is required
         </b-form-invalid-feedback>
@@ -51,6 +52,7 @@
         <b-form-input
           id="password"
           type="password"
+          placeholder="Enter Password"
           v-model="$v.form.password.$model"
           :state="validateState('password')"
         ></b-form-input>
@@ -64,8 +66,14 @@
         <b-form-invalid-feedback
           v-if="$v.form.password.required && !$v.form.password.length"
         >
-          Have length between 5-10 characters long
+          The password must be between 5 to 10.
         </b-form-invalid-feedback>
+        <b-form-invalid-feedback v-if="!$v.form.password.passWithNum">
+          The password must to contain at least one
+          <br />number and one special characters.
+         <br />
+        </b-form-invalid-feedback>
+
       </b-form-group>
 
       <b-form-group
@@ -76,6 +84,7 @@
       >
         <b-form-input
           id="confirmedPassword"
+          placeholder="Enter Confirmation Password"
           type="password"
           v-model="$v.form.confirmedPassword.$model"
           :state="validateState('confirmedPassword')"
@@ -120,18 +129,20 @@
 </template>
 
 <script>
-import countries from "../assets/countries";
+import countries from '../assets/countries';
 import {
   required,
-  minLength,
   maxLength,
-  alpha,
+  minLength,
   sameAs,
-  email
-} from "vuelidate/lib/validators";
-
+  alpha,
+  email,
+  url,
+} from 'vuelidate/lib/validators';
+const passWithNum = value =>
+  /\d/.test(value) && /[-!$%^&*()_+|~=`{}[:;<>?,.@#\]]/g.test(value); 
 export default {
-  name: "Register",
+  name: 'Register',
   data() {
     return {
       form: {
@@ -144,7 +155,7 @@ export default {
         email: "",
         submitError: undefined
       },
-      countries: [{ value: null, text: "", disabled: true }],
+      countries: [{ value: null, text: '', disabled: true }],
       errors: [],
       validated: false
     };
@@ -154,19 +165,49 @@ export default {
       username: {
         required,
         length: (u) => minLength(3)(u) && maxLength(8)(u),
-        alpha
+        onlyLetters: alpha
       },
+      // firstname: {
+      //   required,
+      //   englishLetter: alpha,
+      // },
+      // lastname: {
+      //   required,
+      //   englishLetter: alpha,
+      // },
+      // email: {
+      //   required,
+      //   email,
+      // },
       country: {
-        required
+        required,
       },
       password: {
         required,
-        length: (p) => minLength(5)(p) && maxLength(10)(p)
+        passWithNum,
+        minLength: minLength(5),
+        maxLength: maxLength(10)
       },
       confirmedPassword: {
         required,
-        sameAsPassword: sameAs("password")
+        sameAsPassword: sameAs('password'),
       }
+      // username: {
+      //   required,
+      //   length: (u) => minLength(3)(u) && maxLength(8)(u),
+      //   alpha
+      // },
+      // country: {
+      //   required
+      // },
+      // password: {
+      //   required,
+      //   length: (p) => minLength(5)(p) && maxLength(10)(p)
+      // },
+      // confirmedPassword: {
+      //   required,
+      //   sameAsPassword: sameAs("password")
+      // }
     }
   },
   mounted() {
@@ -183,14 +224,14 @@ export default {
       try {
         const response = await this.axios.post(
           // "https://test-for-3-2.herokuapp.com/user/Register",
-          this.$root.store.server_domain + "/Register",
-
+          // this.$root.store.server_domain + "/Register",
+          'http://localhost:3000' + '/Register',
           {
             username: this.form.username,
-            password: this.form.password
+            password: this.form.password,
           }
         );
-        this.$router.push("/login");
+        this.$router.push('/login');
         // console.log(response);
       } catch (err) {
         console.log(err.response);
@@ -208,13 +249,13 @@ export default {
     },
     onReset() {
       this.form = {
-        username: "",
-        firstName: "",
-        lastName: "",
+        username: '',
+        firstName: '',
+        lastName: '',
         country: null,
-        password: "",
-        confirmedPassword: "",
-        email: ""
+        password: '',
+        confirmedPassword: '',
+        email: '',
       };
       this.$nextTick(() => {
         this.$v.$reset();
