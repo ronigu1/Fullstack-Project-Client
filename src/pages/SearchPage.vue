@@ -114,6 +114,9 @@
             </div> 
             <div v-else> 
               <h2> Search Results:</h2>
+              <h6><strong>Please enter recipe parameters to the search line </strong></h6>
+              <h6><strong>and press on theSearch button. </strong></h6>
+             
             </div>
           </div>
         </b-col>
@@ -126,7 +129,7 @@
             <strong>Cuisine: </strong> {{ this.lastestCuisineFilter }}<br/>
             <strong>intolerance: </strong> {{ this.lastestIntoleranceFilter }}<br/>
           </p>
-          <div v-if="lastRecipesRestore">
+          <div v-if="lastRecipesRestore != null">
               <b-row v-for="r in lastRecipesRestore" :key="r.id">
                 <RecipePreviewSearch class="recipePreview" :recipe="r" />
               </b-row>
@@ -185,6 +188,7 @@ import RecipePreviewSearch from "../components/RecipePreviewSearch.vue";
       this.lastestCuisineFilter = localStorage.getItem("lastestCuisineFilter");
       this.lastestIntoleranceFilter = localStorage.getItem("lastestIntoleranceFilter");
       this.lastRecipesRestore = JSON.parse(localStorage.getItem("lastRecipesRestore"));
+      console.log(localStorage);
     },
 
     computed: {
@@ -263,7 +267,7 @@ import RecipePreviewSearch from "../components/RecipePreviewSearch.vue";
           // localStorage.setItem("lastRecipesRestore", this.lastRecipesRestore);
 // 127.0.0.1
           const response = await this.axios.get(
-            `http://localhost:3000/recipes/search/query/${this.form.query}/amount/${this.form.number}`,
+            ` ${this.$root.store.server_domain}/recipes/search/query/${this.form.query}/amount/${this.form.number}`,
             {
               //query params(after the "?"):
               params: {
