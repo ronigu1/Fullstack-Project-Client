@@ -61,18 +61,39 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
 Vue.use(VueAxios, axios);
 
 Vue.config.productionTip = false;
 
+const apiInstance = axios.create({
+  withCredentials: true,
+  baseURL: "http://localhost:3000"
+})
+
 const shared_data = {
   server_domain: "http://localhost:3000",
-  username: localStorage.username,
+  username: null,
+  watchedRecipes: [],
   login(username) {
+    this.watchedRecipes = [];
     localStorage.setItem("username", username);
     this.username = username;
     console.log("login", this.username);
+  },
+  setWatchedRecipes(recipes){
+    this.watchedRecipes.push(...recipes)
+  },
+  updateWatchedRecipes(recepie){
+    if(this.watchedRecipes)
+      this.watchedRecipes.shift();
+      this.watchedRecipes.push(recepie);
+  },
+  getWatchedRecipesIds(){
+    let watchedRecipesIds = [];
+    this.watchedRecipes.map((recepie)=> {
+      watchedRecipesIds.push(recepie.id)
+    });
+    return watchedRecipesIds;
   },
   logout() {
     console.log("logout");
@@ -88,6 +109,7 @@ new Vue({
   data() {
     return {
       store: shared_data,
+      apiRequest: apiInstance
     };
   },
   methods: {

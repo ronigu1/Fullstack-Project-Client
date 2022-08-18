@@ -4,7 +4,7 @@ import NotFound from "./pages/NotFoundPage";
 const routes = [
   {
     path: "/",
-    name: "main",
+    name: "mainpage",
     component: Main,
   },
   {

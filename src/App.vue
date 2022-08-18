@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link :to="{ name: 'main' }">Vue Recipes</router-link>|
+      <router-link :to="{ name: 'mainpage' }">Vue Recipes</router-link>|
       <router-link :to="{ name: 'search' }">Search</router-link>|
       {{ !$root.store.username }}
       <span v-if="!$root.store.username">
@@ -15,19 +15,41 @@
     </div>
     <router-view />
   </div>
-</template>
+</template> 
 
 <script>
 export default {
   name: "App",
   methods: {
-    Logout() {
-      this.$root.store.logout();
-      this.$root.toast("Logout", "User logged out successfully", "success");
+    async Logout() {
+      try{
+        // Save users last watched recepies ids in server
+        let watchedRecipesIds = this.$root.store.getWatchedRecipesIds();
+        console.log("watchedRecipesIds");
+        console.log(watchedRecipesIds);
+        const setResponse = await this.$root.apiRequest.post(
+          '/users/watchedrecipes',
+          {
+            recipeId1: watchedRecipesIds[0],
+            recipeId2: watchedRecipesIds[1],
+            recipeId3: watchedRecipesIds[2]
+          }
+        );
+        console.log(setResponse)
+        // send server logout request
+        const logoutResponse = await this.$root.apiRequest.post('/logout');
+        console.log(logoutResponse)
+        this.$root.store.logout();
+        this.$root.toast("Logout", "User logged out successfully", "success");
 
-      this.$router.push("/").catch(() => {
-        this.$forceUpdate();
-      });
+        // navigat to main page
+        this.$router.push("/").catch(() => {
+          this.$forceUpdate();
+        });
+      } catch (err) {
+        console.log(err.response);
+        this.form.submitError = err.response.data.message;
+      }
     }
   }
 };
@@ -37,7 +59,6 @@ export default {
 @import "@/scss/form-style.scss";
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;

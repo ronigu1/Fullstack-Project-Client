@@ -93,18 +93,28 @@ export default {
     },
     async Login() {
       try {
-        const response = await this.axios.post(
-          this.$root.store.server_domain +"/login",          
+        const loginResponse = await this.$root.apiRequest.post(
+          '/login',
           {
             username: this.form.username,
             password: this.form.password
           }
-        );
-        // console.log(response);
-        // this.$root.loggedIn = true;
-        console.log("this.$root.store.login");
-        console.log(this.$root.store.login);
+        );  
+        // console.log("loginResponse");
+        // console.log(loginResponse);
+        
+        // console.log("this.$root.store.login");
+        // console.log(this.$root.store.login);
         this.$root.store.login(this.form.username);
+        
+        // set user watched recepies
+        const watchedRecipesResponse = await this.$root.apiRequest.get('/users/watchedRecipes');
+        console.log(watchedRecipesResponse);
+        const recipes = watchedRecipesResponse.data;
+        if(recipes)
+          this.$root.store.setWatchedRecipes(recipes);        
+        
+        // route to main page
         this.$router.push("/");
       } catch (err) {
         console.log(err.response);
