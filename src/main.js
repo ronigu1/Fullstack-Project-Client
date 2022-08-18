@@ -99,6 +99,11 @@ const shared_data = {
     console.log("logout");
     localStorage.removeItem("username");
     this.username = undefined;
+    localStorage.setItem("lastestSearch", null);
+    localStorage.setItem("lastestDietFilter", null);
+    localStorage.setItem("lastestCuisineFilter", null);
+    localStorage.setItem("lastestIntoleranceFilter", null);
+    localStorage.setItem("lastRecipesRestore", null);
   },
 };
 console.log(shared_data);
