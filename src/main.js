@@ -95,15 +95,15 @@ const shared_data = {
   getWatchedRecipesIds(){
     let watchedRecipesIds = [];
     this.watchedRecipes.map((recepie)=> {
-      watchedRecipesIds.push(recepie.id)
+      watchedRecipesIds.push((recepie.id).toString())
     });
     return watchedRecipesIds;
   },
   logout() {
     console.log("logout");
-    // localStorage.removeItem("username");
     localStorage.setItem("username", undefined);
     this.username = undefined;
+    localStorage.setItem("watchedRecipes", null);
     localStorage.setItem("lastestSearch", null);
     localStorage.setItem("lastestDietFilter", null);
     localStorage.setItem("lastestCuisineFilter", null);

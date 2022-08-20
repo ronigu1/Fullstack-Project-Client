@@ -1,18 +1,19 @@
 <template>
-  <div class="favoriting">
-    <label class="favorite__heart" 
+  <!-- <div class="favoriting"> -->
+    <!-- <label class="favorite__heart" 
             v-bind:class="{'favorite__heart__selected': value, 'is-disabled': disabled}" 
-            v-on:click="favorite">
+            @click="favorite"> -->
+    <label class="favorite__heart" 
+            v-bind:class="{'favorite__heart__selected': value, 'is-disabled': disabled}">
         <input class="favorite__checkbox"
                 type="checkbox"
                 v-bind:name="name"
                 v-bind:value="value"
-                v-bind:required="required"
-                v-bind:disabled="disabled"
-                v-model="value">
-        ❤   
+                v-model="value"
+                @click="$emit('click')">
+                &#9829;
     </label>
-  </div>
+  <!-- </div> -->
 </template>
 
 <script>
@@ -21,7 +22,7 @@ export default {
     props: {
         name: {
             type: String,
-            default: "favorite"
+            default: "favoriteBtn"
         },
         value: {
             type: Boolean,
@@ -31,37 +32,26 @@ export default {
             type: Boolean,
             default: false
         }
-    },
-    computed: {
-
-    },
-    methods: {
-        favorite: function() {
-            if (this.disabled==true) {
-                return;
-            }
-            this.value = !this.value;
-            this.$emit('favoriteChange');
-        }  
     }
 }
 </script>
 
 <style scoped>
 .favoriting{
-    display: inline-block
+    display: inline-block;
 }
 
 .favorite__heart {
     display: inline-block;
-    padding: 3px;
+    padding: 0px 5px;
     vertical-align: middle;
-    line-height: 1;
-    font-size: 16px;
+    /* line-height: 1; */
+    font-size: 20px;
     color: #ABABAB;
     cursor: pointer;
     -webkit-transition: color .2s ease-out;
     transition: color .2s ease-out;
+    margin: 0;
 }
 
 .favorite__heart.is-disabled:hover {
@@ -74,7 +64,8 @@ export default {
     clip: rect(0 0 0 0);
     height: 1px;
     width: 1px;
-    margin: -1px;
+    margin: 0;
+    /* margin: -1px; */
     padding: 0;
     border: 0;
 }

@@ -1,15 +1,21 @@
 <template>
-  <b-container>
-    <b-row>
-      <h3 class="title">
+  <div>
+  <!-- <b-container class="recipePreviewList"> -->
+    <!-- <b-row> -->
+    <b-container class="title">
+      <h3>
         {{ title }}
         <slot></slot>
       </h3>
-    </b-row>
-    <b-row v-for="r in recipes" :key="r.id">
+    </b-container>
+    <!-- </b-row> -->
+    <!-- <b-container> -->
+    <b-container v-for="r in recipes" :key="r.id">
       <RecipePreview class="recipePreview" :recipe="r" />
-    </b-row>
-  </b-container>
+    </b-container>
+    <!-- </b-container> -->
+  <!-- </b-container> -->
+  </div>
 </template>
 
 <script>
@@ -64,10 +70,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.title{
+
+// .container{
+//   padding: 0;
+// }
+
+.title {
   font-family: ‘Merriweather’, Georgia, serif;
+  text-align: center;
+  // padding-bottom: 10px;
 }
-.container {
-  min-height: 400px;
+.recipePreview{
+  padding-bottom: 5px;
+  padding-left: 0;
+  padding-right: 0;
 }
+// .recipePreviewList {
+//   min-height: 400px;
+// }
 </style>
