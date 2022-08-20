@@ -2,7 +2,7 @@
   <div class="container">
     <h1 class="title">Search Page</h1>
     <b-form @submit.prevent="searchFunc" @reset.prevent="resetForm">
-      <div class="quertD">
+      <div class="formQ">
         <b-form-group id="query">
           <b-form-input
                   v-model="form.query"
@@ -87,7 +87,7 @@
               variant="primary"
               class="ml-3 w-30"
               :disabled="resetDisabled"
-              v-on:click="updateLastSearchDetails();"> Search </b-button>
+              > Search </b-button>
         </div>
     </b-form>
     <!-- <div> 
@@ -182,13 +182,19 @@ import RecipePreviewSearch from "../components/RecipePreviewSearch.vue";
     },
 
     mounted() {
-      //update lastest Search detailes from local storage:
-      this.lastestSearch = localStorage.getItem("lastestSearch");
-      this.lastestDietFilter = localStorage.getItem("lastestDietFilter");
-      this.lastestCuisineFilter = localStorage.getItem("lastestCuisineFilter");
-      this.lastestIntoleranceFilter = localStorage.getItem("lastestIntoleranceFilter");
-      this.lastRecipesRestore = JSON.parse(localStorage.getItem("lastRecipesRestore"));
-      console.log(localStorage);
+      if ("username" in localStorage){
+        console.log("username in localStorage");    
+        if(localStorage.getItem("username") !== 'undefined'){
+          //update lastest Search detailes from local storage:
+            this.lastestSearch = localStorage.getItem("lastestSearch");
+            this.lastestDietFilter = localStorage.getItem("lastestDietFilter");
+            this.lastestCuisineFilter = localStorage.getItem("lastestCuisineFilter");
+            this.lastestIntoleranceFilter = localStorage.getItem("lastestIntoleranceFilter");
+            this.lastRecipesRestore = JSON.parse(localStorage.getItem("lastRecipesRestore"));
+            console.log(localStorage);
+        }
+      }
+
     },
 
     computed: {
@@ -234,20 +240,29 @@ import RecipePreviewSearch from "../components/RecipePreviewSearch.vue";
       },
       updateLastSearchDetails() {
         //get from local Storage
-        this.lastestSearch = localStorage.getItem("lastestSearch");
-        this.lastestDietFilter = localStorage.getItem("lastestDietFilter");
-        this.lastestCuisineFilter = localStorage.getItem("lastestCuisineFilter");
-        this.lastestIntoleranceFilter = localStorage.getItem("lastestIntoleranceFilter");
-        this.lastRecipesRestore = JSON.parse(localStorage.getItem("lastRecipesRestore"));
-
+        // console.log("login", this.username);
+        // console.log("login localStorage", localStorage.username);
+        // console.log("login localStorage GET", localStorage.getItem("username"));
+        // console.log("localStorage", localStorage);        
+        if (localStorage.username){
+          if(localStorage.getItem("username") !== 'undefined'){
+            this.lastestSearch = localStorage.getItem("lastestSearch");
+            this.lastestDietFilter = localStorage.getItem("lastestDietFilter");
+            this.lastestCuisineFilter = localStorage.getItem("lastestCuisineFilter");
+            this.lastestIntoleranceFilter = localStorage.getItem("lastestIntoleranceFilter");
+            this.lastRecipesRestore = JSON.parse(localStorage.getItem("lastRecipesRestore"));
+          }
+        }
       },
       sortResults(event){
       },
 
       async searchFunc(){
         try {
-          this.axios.defaults.withCredentials=true;
+          this.updateLastSearchDetails();
+          // this.axios.defaults.withCredentials=false;
           //set data acording the user's input
+          console.log("this.store.username",this.$root.store.username);
           this.currentSearch = this.form.query;
           console.log( this.currentSearch);
           this.currentDietFilter = this.form.diet;
@@ -259,13 +274,6 @@ import RecipePreviewSearch from "../components/RecipePreviewSearch.vue";
           this.currentIntoleranceFilter = this.form.intolerance;
           console.log( this.currentIntoleranceFilter.toString());
 
-          //set to local Storage
-          localStorage.setItem("lastestSearch", this.currentSearch);
-          localStorage.setItem("lastestDietFilter", this.currentDietFilter);
-          localStorage.setItem("lastestCuisineFilter", this.currentCuisineFilter);
-          localStorage.setItem("lastestIntoleranceFilter", this.currentIntoleranceFilter);
-          // localStorage.setItem("lastRecipesRestore", this.lastRecipesRestore);
-// 127.0.0.1
           const response = await this.axios.get(
             ` ${this.$root.store.server_domain}/recipes/search/query/${this.form.query}/amount/${this.form.number}`,
             {
@@ -277,18 +285,29 @@ import RecipePreviewSearch from "../components/RecipePreviewSearch.vue";
               },
             },
           );
+          //set to local Storage
+          if (localStorage.username){
+            if(localStorage.getItem("username") !== 'undefined'){
+              localStorage.setItem("lastestSearch", this.currentSearch);
+              localStorage.setItem("lastestDietFilter", this.currentDietFilter);
+              localStorage.setItem("lastestCuisineFilter", this.currentCuisineFilter);
+              localStorage.setItem("lastestIntoleranceFilter", this.currentIntoleranceFilter);
+              // localStorage.setItem("lastRecipesRestore", this.lastRecipesRestore);
+              localStorage.setItem("lastRecipesRestore", JSON.stringify(response.data));
+            }
+          }
           this.recipes = [];
           this.recipes=response.data;
-          console.log("--------recipes----------")
-          console.log(this.recipes)
-          console.log("-------------------------")
-          localStorage.setItem("lastRecipesRestore", JSON.stringify(response.data));
-          console.log("--------lastRecipesRestore----------")
-          console.log(this.lastRecipesRestore)
-          console.log("-------------------------")
-          console.log("--------lastRecipesRestore[0]----------")
-          console.log(this.lastRecipesRestore[0])
-          console.log("-------------------------")
+          // console.log("--------recipes----------")
+          // console.log(this.recipes)
+          // console.log("-------------------------")
+          // localStorage.setItem("lastRecipesRestore", JSON.stringify(response.data));
+          // console.log("--------lastRecipesRestore----------")
+          // console.log(this.lastRecipesRestore)
+          // console.log("-------------------------")
+          // console.log("--------lastRecipesRestore[0]----------")
+          // console.log(this.lastRecipesRestore[0])
+          // console.log("-------------------------")
 
 
           //coockie saveSearch //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

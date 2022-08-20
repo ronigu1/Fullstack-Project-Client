@@ -72,13 +72,17 @@ const apiInstance = axios.create({
 
 const shared_data = {
   server_domain: "http://localhost:3000",
-  username: null,
+  username: undefined,
   watchedRecipes: [],
   login(username) {
     this.watchedRecipes = [];
     localStorage.setItem("username", username);
     this.username = username;
     console.log("login", this.username);
+    console.log("login localStorage", localStorage.username);
+    console.log("localStorage", localStorage);
+
+
   },
   setWatchedRecipes(recipes){
     this.watchedRecipes.push(...recipes)
@@ -97,7 +101,8 @@ const shared_data = {
   },
   logout() {
     console.log("logout");
-    localStorage.removeItem("username");
+    // localStorage.removeItem("username");
+    localStorage.setItem("username", undefined);
     this.username = undefined;
     localStorage.setItem("lastestSearch", null);
     localStorage.setItem("lastestDietFilter", null);
@@ -106,7 +111,7 @@ const shared_data = {
     localStorage.setItem("lastRecipesRestore", null);
   },
 };
-console.log(shared_data);
+console.log("shared_data:",shared_data);
 // Vue.prototype.$root.store = shared_data;
 
 new Vue({

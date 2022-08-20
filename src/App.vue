@@ -20,6 +20,11 @@
 <script>
 export default {
   name: "App",
+  mounted(){
+    if (localStorage.getItem("username") !== 'undefined'){
+      this.$root.store.username = localStorage.getItem("username");
+    }
+  },
   methods: {
     async Logout() {
       try{
