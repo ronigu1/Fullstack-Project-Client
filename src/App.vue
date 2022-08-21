@@ -1,17 +1,46 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link :to="{ name: 'mainpage' }">Vue Recipes</router-link>|
-      <router-link :to="{ name: 'search' }">Search</router-link>|
-      {{ !$root.store.username }}
-      <span v-if="!$root.store.username">
-        Guest:
-        <router-link :to="{ name: 'register' }">Register</router-link>|
-        <router-link :to="{ name: 'login' }">Login</router-link>|
-      </span>
-      <span v-else>
-        {{ $root.store.username }}: <button @click="Logout">Logout</button>|
-      </span>
+      <b-navbar  class="fullBar" variant="success">
+        <b-navbar>
+        <router-link :to="{ name: 'mainpage' }">Main</router-link>|
+        <router-link :to="{ name: 'search' }">Search</router-link>|
+        <router-link :to="{ name: 'about' }">About</router-link>|
+      </b-navbar>
+      <b-navbar-nav class="ml-auto">
+              <span class="navbar-text space" v-if="!$root.store.username"> <b>Hello Guest</b> </span>
+              <span class="navbar-text space" v-if="$root.store.username"> <b>Hello {{$root.store.username}}</b> </span>
+              <b-nav-item-dropdown :text="$root.store.username" v-if="$root.store.username" right>
+                  Personal:
+                  <router-link tag="" :to="{ name: 'main' }" @click.native="$root.store.logout">Logout</router-link>
+                  <router-link tag="b-dropdown-item" :to="{ name: 'userrecepies' }">favorites</router-link>
+                  <router-link tag="b-dropdown-item" :to="{ name: 'userrecepies' }">My Recipes</router-link>
+                  <router-link tag="b-dropdown-item" :to="{ name: 'familyrecepies' }">My Family Recipes</router-link>
+                  <b-button id="show-modal" @click="showModal = true">New Recipe</b-button>
+                  <Teleport to="body">
+                    <modal :show="showModal" @close="showModal = false">
+                      <template #header>
+                        <h3>New Recipe</h3>
+                      </template>
+                    </modal>
+                </Teleport>
+        </b-nav-item-dropdown>
+        <b-button @click="Logout" v-if="$root.store.username">Logout</b-button>
+        <b-button :to="{ name: 'register' }" @click="register" v-if="!$root.store.username" class="space">Register</b-button>
+        <b-button :to="{ name: 'login' }" @click="login" v-if="!$root.store.username">Login</b-button>   
+
+        <!-- <span v-if="!$root.store.username">
+          Guest:
+          <router-link :to="{ name: 'register' }">Register</router-link>|
+          <router-link :to="{ name: 'login' }">Login</router-link>|
+        </span>
+        <span v-else>
+          <button @click="Logout">Logout</button>|
+        </span> -->
+      </b-navbar-nav>  
+      
+
+      </b-navbar>
     </div>
     <router-view />
   </div>
@@ -98,5 +127,16 @@ export default {
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+
+#show-modal {
+  font-weight: bold;
+  color: #2c3e50;
+  background-color: white;
+  border: 0px;
+}
+
+.space{
+  margin-right: 10px;
 }
 </style>
