@@ -69,49 +69,16 @@ export default {
   },
   mounted(){
     console.log("MainPage Mounted started")
-    // console.log("this.$root.store.watchedRecipes");
-    // console.log(this.$root.store.watchedRecipes);
     console.log("updateLastViewdRecepies")
     this.updateLastViewdRecepies();
     console.log("updateRandomRecipes")
     this.updateRandomRecipes();
     console.log("MainPage Mounted finised")
   },
-  // beforeCreate() {
-  //   console.log("MainPage beforeCreate started")
-  //   console.log("this.$root.store.watchedRecipes");
-  //   console.log(this.$root.store.watchedRecipes);
-  //   // updateLastViewdRecepies();
-  //   // updateRandomRecipes();
-  //   console.log("MainPage beforeCreate finised")
-  // },
-  // created() {
-  //   console.log("MainPage created started")
-  //   console.log("this.$root.store.watchedRecipes");
-  //   console.log(this.$root.store.watchedRecipes);
-  //   // updateLastViewdRecepies();
-  //   // updateRandomRecipes();
-  //   console.log("MainPage created finised")
-  // },
-  // computed:{
-    
-  // },
   beforeUpdate(){
     console.log("MainPage beforeUpdate started")
-    // console.log("this.$root.store.watchedRecipes");
-    // console.log(this.$root.store.watchedRecipes); 
-    // console.log("updateLastViewdRecepies")
-    // this.updateLastViewdRecepies();
-    // console.log("updateRandomRecipes")
-    // this.updateRandomRecipes();   
     console.log("MainPage beforeUpdate finised")
   },
-  // updated(){
-  //   console.log("MainPage updated started")
-  //   console.log("this.$root.store.watchedRecipes");
-  //   console.log(this.$root.store.watchedRecipes);    
-  //   console.log("MainPage updated finised")
-  // },
   methods:{
     async updateRandomRecipes() {
       // if (this.$root.store.username){
@@ -151,26 +118,11 @@ export default {
     },
     async updateLastViewdRecepies() {
       if (this.$root.store.username){
-        // console.log("this.$root.store.watchedRecipes");
-        // console.log(this.$root.store.watchedRecipes);
-        // const recipes = this.$root.store.watchedRecipes;
-        // // console.log("recipes");
-        // // console.log(recipes);
-        // this.lastViewdRecepies = [];
-        // this.lastViewdRecepies.push(...recipes);
-        // console.log("lastViewdRecepies");
-        // console.log(this.lastViewdRecepies);
         var WatchedRecipesIds = ""
-        // console.log("this.$root.store.getWatchedRecipesIds()")
-        // console.log(this.$root.store.getWatchedRecipesIds())
-        
         this.$root.store.getWatchedRecipesIds().map((recipesId)=>{
           WatchedRecipesIds+=','
           WatchedRecipesIds+=recipesId
         })
-        // console.log("WatchedRecipesIds")
-        // console.log(WatchedRecipesIds)
-
         try {
           const response = await this.$root.apiRequest.get(
             '/recipes/recipesBulk',
@@ -180,13 +132,9 @@ export default {
               }
             }
           );
-          // console.log("response");
-          // console.log(response);
-          // const recipes = response.data.recipes;
           const recipes = response.data;        
           this.lastViewdRecepies = [];
           this.lastViewdRecepies.push(...recipes);
-          // console.log(this.recipes);
         } catch (error) {
           console.log(error);
         }
