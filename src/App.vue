@@ -12,7 +12,7 @@
               <span class="navbar-text space" v-if="$root.store.username"> <b>Hello {{$root.store.username}}</b> </span>
               <!-- <b-nav-item-dropdown :text="$root.store.username" v-if="$root.store.username" right> -->
               <b-nav-item-dropdown v-if="$root.store.username" right>
-              <b-textarea style="font-weight: bold; color: #2c3e50; font-size: 1rem;">Profile:</b-textarea>
+              <b-textarea name="Profile" style="font-weight: bold; color: #2c3e50; font-size: 1rem;">Profile:</b-textarea>
                   <router-link tag="" :to="{ name: 'main' }" @click.native="$root.store.logout">Logout</router-link>
                   <router-link tag="b-dropdown-item" :to="{ name: 'favoritesrecepies' }">My favorites</router-link>
                   <router-link tag="b-dropdown-item" :to="{ name: 'userrecepies' }">My Recipes</router-link>
@@ -27,8 +27,8 @@
                 </Teleport>
         </b-nav-item-dropdown>
         <b-button @click="Logout" v-if="$root.store.username">Logout</b-button>
-        <b-button :to="{ name: 'register' }" @click="register" v-if="!$root.store.username" class="space">Register</b-button>
-        <b-button :to="{ name: 'login' }" @click="login" v-if="!$root.store.username">Login</b-button>   
+        <b-button :to="{ name: 'register' }" v-if="!$root.store.username" class="space">Register</b-button>
+        <b-button :to="{ name: 'login' }" v-if="!$root.store.username">Login</b-button>   
 
         <!-- <span v-if="!$root.store.username">
           Guest:
