@@ -100,19 +100,21 @@ export default {
             password: this.form.password
           }
         );  
-        // console.log("loginResponse");
-        // console.log(loginResponse);
-        
-        // console.log("this.$root.store.login");
-        // console.log(this.$root.store.login);
         this.$root.store.login(this.form.username);
         
         // set user watched recepies
         const watchedRecipesResponse = await this.$root.apiRequest.get('/users/watchedRecipes');
         console.log(watchedRecipesResponse);
-        const recipes = watchedRecipesResponse.data;
-        if(recipes)
-          this.$root.store.setWatchedRecipes(recipes);        
+        const watchedRecipes = watchedRecipesResponse.data;
+        if(watchedRecipes)
+          this.$root.store.setWatchedRecipes(watchedRecipes);        
+        
+        // set user favorites recepies
+        const favoritesRecipesResponse = await this.$root.apiRequest.get('/users/favorites');
+        console.log(favoritesRecipesResponse);
+        const favoritesRecipes = favoritesRecipesResponse.data;
+        if(favoritesRecipes)
+          this.$root.store.setFavoritesRecepies(favoritesRecipes);        
         
         // route to main page
         this.$router.push("/");

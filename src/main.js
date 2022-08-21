@@ -74,6 +74,7 @@ const shared_data = {
   server_domain: "http://localhost:3000",
   username: undefined,
   watchedRecipes: [],
+  favoritesRecepies: [],
   login(username) {
     this.watchedRecipes = [];
     localStorage.setItem("username", username);
@@ -81,28 +82,94 @@ const shared_data = {
     console.log("login", this.username);
     console.log("login localStorage", localStorage.username);
     console.log("localStorage", localStorage);
-
-
   },
   setWatchedRecipes(recipes){
-    this.watchedRecipes.push(...recipes)
+    recipes.map((recepie)=> {
+      this.watchedRecipes.push(recepie.id)
+      })
+    // this.watchedRecipes.push(...recipes)
   },
-  updateWatchedRecipes(recepie){
+  addToWatchedRecipes(recepie){
     if(this.watchedRecipes)
-      this.watchedRecipes.shift();
-      this.watchedRecipes.push(recepie);
+      // this.watchedRecipes.shift();
+      // this.watchedRecipes.push(recepie);
+      this.watchedRecipes.push(recepie.id);
   },
+  isWatchedRecipesContainRecepie(recepieId){
+    var flag = false;
+    this.watchedRecipes.map((recepie)=> {
+      // if(recepie.id == recepieId)
+      if(recepie == recepieId)
+        flag=true
+      })   
+    return flag
+  },
+  removeFromWatchedRecipes(recepie){
+    if(this.watchedRecipes)
+      // this.watchedRecipes.shift();
+      var index = this.watchedRecipes.indexOf(recepie.id);
+      this.watchedRecipes.splice(index,1)
+  },  
   getWatchedRecipesIds(){
     let watchedRecipesIds = [];
-    this.watchedRecipes.map((recepie)=> {
-      watchedRecipesIds.push((recepie.id).toString())
-    });
+    let len = this.watchedRecipes.length
+    while(len > 0 && watchedRecipesIds.length < 3)
+    {
+      var recepie = this.watchedRecipes[len-1]
+      watchedRecipesIds.push((recepie).toString())
+      len-=1
+      // watchedRecipesIds.push((recepie.id).toString())
+    }
     return watchedRecipesIds;
+  },
+  setFavoritesRecepies(recipes){
+    recipes.map((recepie)=> {
+      this.favoritesRecepies.push(recepie.id)
+      })
+    // this.favoritesRecepies.push(...recipes)
+  },
+  addToFavoritesRecipes(recepie){
+    if(this.favoritesRecepies)
+      // this.watchedRecipes.shift();
+      // this.favoritesRecepies.push(recepie);
+      this.favoritesRecepies.push(recepie.id);
+  },
+  removeFromFavoritesRecipes(recepie){
+    if(this.favoritesRecepies)
+      // this.watchedRecipes.shift();
+      var index = this.favoritesRecepies.indexOf(recepie.id);
+      this.favoritesRecepies.splice(index,1)
+  },
+  isFavoritesRecipesContainRecepie(recepieId){
+    var flag = false;
+    this.favoritesRecepies.map((recepie)=> {
+      // if(recepie.id == recepieId)
+      if(recepie == recepieId)
+        flag=true
+      })   
+    return flag
+  },
+  getFavoritesRecipesIds(){
+    let favoritesRecepiesIds = [];
+    this.favoritesRecepies.map((recepie)=> {
+      favoritesRecepiesIds.push((recepie).toString())
+    })   
+
+    // let len = this.favoritesRecepies.length
+    // while(len > 0 && favoritesRecepiesIds.length < 3)
+    // {
+    //   var recepie = this.watchfavoritesRecepiesdRecipes[len-1]
+    //   favoritesRecepiesIds.push((recepie).toString())
+    //   len-=1
+    //   // favoritesRecepiesIds.push((recepie.id).toString())
+    // }
+    return favoritesRecepiesIds;
   },
   logout() {
     console.log("logout");
     localStorage.setItem("username", undefined);
     this.username = undefined;
+    localStorage.setItem("favoritesRecepies", null);
     localStorage.setItem("watchedRecipes", null);
     localStorage.setItem("lastestSearch", null);
     localStorage.setItem("lastestDietFilter", null);

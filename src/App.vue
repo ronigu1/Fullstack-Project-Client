@@ -25,12 +25,14 @@ export default {
     if (localStorage.getItem("username") !== 'undefined'){
       this.$root.store.username = localStorage.getItem("username");
       this.$root.store.watchedRecipes = JSON.parse(localStorage.getItem("watchedRecipes"));
+      this.$root.store.favoritesRecepies = JSON.parse(localStorage.getItem("favoritesRecepies"));
     }
   },
   beforeUpdate(){
     console.log("App beforeUpdate")
      if (this.$root.store.username){
       localStorage.setItem("watchedRecipes", JSON.stringify(this.$root.store.watchedRecipes));
+      localStorage.setItem("favoritesRecepies", JSON.stringify(this.$root.store.favoritesRecepies));
     }
   },
   methods: {
@@ -41,12 +43,13 @@ export default {
           let watchedRecipesIds = this.$root.store.getWatchedRecipesIds();
           console.log("watchedRecipesIds");
           console.log(watchedRecipesIds);
+          
           const setResponse = await this.$root.apiRequest.post(
             '/users/watchedrecipes',
             {
               recipeId1: watchedRecipesIds[0],
               recipeId2: watchedRecipesIds[1],
-              recipeId3: watchedRecipesIds[2]
+              recipeId3: watchedRecipesIds[2],
             }
           );
           console.log(setResponse)

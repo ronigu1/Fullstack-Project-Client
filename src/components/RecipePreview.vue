@@ -81,10 +81,10 @@ export default {
     };
   },
   created(){
-    // console.log(this.isLiked);
-    this.isLiked=this.recipe.favoriteRecipe;
-    // console.log(this.isLiked);
-    this.isWatched=this.recipe.lastWatched;
+    if(this.$root.store.isFavoritesRecipesContainRecepie(this.recipe.id))
+      this.isLiked=true;
+    if(this.$root.store.isWatchedRecipesContainRecepie(this.recipe.id))
+      this.isWatched=true;
   },
   methods: { 
     async changeFavorite(){
@@ -105,7 +105,8 @@ export default {
               //     recipeId: recepie_id.toString()
               //   }
               // }
-          );  
+          );
+          this.$root.store.removeFromFavoritesRecipes(this.recipe);
         }
         else{
           console.log("else")
@@ -117,11 +118,13 @@ export default {
               {
                 recipeId: recepie_id.toString()
               }
-          ); 
+          );
+         this.$root.store.addToFavoritesRecipes(this.recipe);          
         }
-      this.isLiked = !this.isLiked;        
-      console.log("finished")
-      console.log("changed recipe " + recepie_id + " favorite tag to " + this.isLiked);
+
+        this.isLiked = !this.isLiked;        
+        console.log("finished")
+        console.log("changed recipe " + recepie_id + " favorite tag to " + this.isLiked);
       }catch(err){
         console.log(err.response);
         this.form.submitError = err.response.data.message;

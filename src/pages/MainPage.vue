@@ -101,7 +101,7 @@ export default {
     // console.log("this.$root.store.watchedRecipes");
     // console.log(this.$root.store.watchedRecipes); 
     // console.log("updateLastViewdRecepies")
-    this.updateLastViewdRecepies();
+    // this.updateLastViewdRecepies();
     // console.log("updateRandomRecipes")
     // this.updateRandomRecipes();   
     console.log("MainPage beforeUpdate finised")
@@ -127,53 +127,69 @@ export default {
       // }
       
       
-      try {
-        const response = await this.$root.apiRequest.get(
-           "/recipes/random",
-          // "https://test-for-3-2.herokuapp.com/recipes/random"
-        );
+      // try {
+      //   const response = await this.$root.apiRequest.get(
+      //      "/recipes/random",
+      //     // "https://test-for-3-2.herokuapp.com/recipes/random"
+      //   );
 
-        console.log(response);
-        // const recipes = response.data.recipes;
-        const recipes = response.data;   
+      //   console.log(response);
+      //   // const recipes = response.data.recipes;
+      //   const recipes = response.data;   
            
-        this.randomRecepies = [];
-        this.randomRecepies.push(...recipes);
-        // localStorage.setItem("randomRecepies",  JSON.stringify(this.randomRecepies));
-        console.log(this.recipes);
+      //   this.randomRecepies = [];
+      //   this.randomRecepies.push(...recipes);
+      //   // localStorage.setItem("randomRecepies",  JSON.stringify(this.randomRecepies));
+      //   console.log(this.recipes);
         
         
        
-      } catch (error) {
-        console.log(error);
-      }
-      //  this.randomRecepies = JSON.parse(localStorage.getItem("randomRecepies"));
+      // } catch (error) {
+      //   console.log(error);
+      // }
+       this.randomRecepies = JSON.parse(localStorage.getItem("randomRecepies"));
     },
-    updateLastViewdRecepies() {
+    async updateLastViewdRecepies() {
       if (this.$root.store.username){
         // console.log("this.$root.store.watchedRecipes");
         // console.log(this.$root.store.watchedRecipes);
-        const recipes = this.$root.store.watchedRecipes;
-        // console.log("recipes");
-        // console.log(recipes);
-        this.lastViewdRecepies = [];
-        this.lastViewdRecepies.push(...recipes);
+        // const recipes = this.$root.store.watchedRecipes;
+        // // console.log("recipes");
+        // // console.log(recipes);
+        // this.lastViewdRecepies = [];
+        // this.lastViewdRecepies.push(...recipes);
         // console.log("lastViewdRecepies");
         // console.log(this.lastViewdRecepies);
-        // try {
-        //   const response = await this.$root.apiRequest.get(
-        //     '/watchedRecipes',
-        //   );
+        var WatchedRecipesIds = ""
+        // console.log("this.$root.store.getWatchedRecipesIds()")
+        // console.log(this.$root.store.getWatchedRecipesIds())
+        
+        this.$root.store.getWatchedRecipesIds().map((recipesId)=>{
+          WatchedRecipesIds+=','
+          WatchedRecipesIds+=recipesId
+        })
+        // console.log("WatchedRecipesIds")
+        // console.log(WatchedRecipesIds)
 
-        //   console.log(response);
-        //   // const recipes = response.data.recipes;
-        //   const recipes = response.data;        
-        //   this.lastViewdRecepies = [];
-        //   this.lastViewdRecepies.push(...recipes);
-        //   // console.log(this.recipes);
-        // } catch (error) {
-        //   console.log(error);
-        // }
+        try {
+          const response = await this.$root.apiRequest.get(
+            '/recipes/recipesBulk',
+            {
+              params: {
+                recipesIds: WatchedRecipesIds
+              }
+            }
+          );
+          // console.log("response");
+          // console.log(response);
+          // const recipes = response.data.recipes;
+          const recipes = response.data;        
+          this.lastViewdRecepies = [];
+          this.lastViewdRecepies.push(...recipes);
+          // console.log(this.recipes);
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
 
