@@ -169,6 +169,8 @@ const shared_data = {
     console.log("logout");
     localStorage.setItem("username", undefined);
     this.username = undefined;
+    watchedRecipes= [],
+    favoritesRecepies= [],
     localStorage.setItem("favoritesRecepies", null);
     localStorage.setItem("watchedRecipes", null);
     localStorage.setItem("lastestSearch", null);

@@ -10,13 +10,14 @@
       <b-navbar-nav class="ml-auto">
               <span class="navbar-text space" v-if="!$root.store.username"> <b>Hello Guest</b> </span>
               <span class="navbar-text space" v-if="$root.store.username"> <b>Hello {{$root.store.username}}</b> </span>
-              <b-nav-item-dropdown :text="$root.store.username" v-if="$root.store.username" right>
-                  Personal:
+              <!-- <b-nav-item-dropdown :text="$root.store.username" v-if="$root.store.username" right> -->
+              <b-nav-item-dropdown v-if="$root.store.username" right>
+              <b-textarea style="font-weight: bold; color: #2c3e50; font-size: 1rem;">Profile:</b-textarea>
                   <router-link tag="" :to="{ name: 'main' }" @click.native="$root.store.logout">Logout</router-link>
-                  <router-link tag="b-dropdown-item" :to="{ name: 'userrecepies' }">favorites</router-link>
+                  <router-link tag="b-dropdown-item" :to="{ name: 'favoritesrecepies' }">My favorites</router-link>
                   <router-link tag="b-dropdown-item" :to="{ name: 'userrecepies' }">My Recipes</router-link>
                   <router-link tag="b-dropdown-item" :to="{ name: 'familyrecepies' }">My Family Recipes</router-link>
-                  <b-button id="show-modal" @click="showModal = true">New Recipe</b-button>
+                  <b-button id="show-modal" class="ModalBtn" @click="showModal = true">Add New Recipe</b-button>
                   <Teleport to="body">
                     <modal :show="showModal" @close="showModal = false">
                       <template #header>
@@ -123,6 +124,10 @@ export default {
 #nav a {
   font-weight: bold;
   color: #2c3e50;
+}
+
+.ModalBtn{
+  padding: 4px 24px !important;
 }
 
 #nav a.router-link-exact-active {
