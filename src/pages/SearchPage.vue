@@ -100,17 +100,21 @@
         <b-col>
           <div>
               <div id="searchResults" v-if="!arrIsEmpty">
-                <label>Sort Results: </label>&nbsp;
-                <select name="sorts" id="sort" @change="sortResults($event)">
-                  <option selected disabled value="">Select option</option>
-                  <option value="likes">Recipe's Popularity</option>
-                  <option value="time">Preparation Time</option>
-                </select>
-                <RecipePreviewListSearch  class="Search Results" 
-                :recipes="recipes"
+                <div class="filterRes">
+                  <!-- <h2> Search Results:</h2> -->
+                  <label>Sort Results: </label>&nbsp;
+                  <select name="sorts" id="sort" @change="sortResults($event)" class="form-control" v-model="selectedStatus">
+                    <option selected disabled value="0">Select option</option>
+                    <option value="likes">Recipe's Popularity</option>
+                    <option value="time">Preparation Time</option>
+                  </select>
+                  </div>
+                <ShowenRecipes  class="Search Results" 
+                :fullRecipes="recipes"
                 title="Search Results"
                 :colLen = "recipes.length"
-                ></RecipePreviewListSearch>
+                :pageStartSearch = "pageSearch"
+                ></ShowenRecipes>
             </div> 
             <div v-else> 
               <h2> Search Results:</h2>
@@ -122,17 +126,24 @@
         </b-col>
 
         <b-col>
-          <h2> Yout last searched recipes:</h2>
-          <p>
+          <!-- <h2> Yout last searched recipes:</h2> -->
+          <div v-if="lastRecipesRestore != null">
+          <p class="lastSearchForm">
             <strong>Past Query: </strong> {{ this.lastestSearch }}<br/>
             <strong>Diet: </strong> {{ this.lastestDietFilter }}<br/>
             <strong>Cuisine: </strong> {{ this.lastestCuisineFilter }}<br/>
             <strong>intolerance: </strong> {{ this.lastestIntoleranceFilter }}<br/>
           </p>
-          <div v-if="lastRecipesRestore != null">
-              <b-row v-for="r in lastRecipesRestore" :key="r.id">
+          
+              <!-- <b-row v-for="r in lastRecipesRestore" :key="r.id">
                 <RecipePreviewSearch class="recipePreview" :recipe="r" />
-              </b-row>
+              </b-row> -->
+              <ShowenRecipes  class="last Results" 
+                :fullRecipes="lastRecipesRestore"
+                title="Yout last searched recipes"
+                :colLen = "recipes.length"
+                :pageStartSearch ="pageSearch"
+              ></ShowenRecipes>
           </div>
         </b-col>
       </b-row>
@@ -142,16 +153,19 @@
 
 <script>
   import RecipePreviewListSearch from "../components/RecipePreviewListSearch";
+  import ShowenRecipes from "../components/ShowenRecipes";
+
   import diets from "../assets/diets";
   import cuisines from "../assets/cuisines";
   import intolerances from "../assets/intolerances";
   import RecipePreview from "../components/RecipePreview";
-import RecipePreviewSearch from "../components/RecipePreviewSearch.vue";
+  import RecipePreviewSearch from "../components/RecipePreviewSearch.vue";
   export default{ 
     name:"SearchPage",
     components: {
-    RecipePreviewListSearch,
-    RecipePreviewSearch
+    // RecipePreviewListSearch,
+    ShowenRecipes,
+    
 },
     data(){
       return{
@@ -166,7 +180,7 @@ import RecipePreviewSearch from "../components/RecipePreviewSearch.vue";
         cuisinesOptions: cuisines,
         dietsOptions: diets,
         intolerancesOptions: intolerances,
-        Searchpressed: false,
+        pageSearch: 0,
 
         lastestSearch: null,
         lastestDietFilter: null,
@@ -196,7 +210,9 @@ import RecipePreviewSearch from "../components/RecipePreviewSearch.vue";
       }
 
     },
-
+    // watch:{
+    //     recipes:function(){return this.recipes;}
+    // },
     computed: {
       arrIsEmpty(){
         if(Array.isArray(this.recipes) && this.recipes.length==0)
@@ -216,7 +232,22 @@ import RecipePreviewSearch from "../components/RecipePreviewSearch.vue";
         }
         return false;
       },
-
+      sortByLikes(){
+        function compare(x,y){
+          if(x.popularity < y.popularity) return 1;
+          if(x.popularity > y.popularity) return -1;
+          return 0;
+        }
+        return [...this.recipes].sort(compare);
+      },
+      sortByTime(){
+        function compare(x,y){
+          if(x.readyInMinutes < y.readyInMinutes) return -1;
+          if(x.readyInMinutes > y.readyInMinutes) return 1;
+          return 0;
+        }
+        return [...this.recipes].sort(compare);
+      },
     },
 
     methods:{
@@ -255,10 +286,18 @@ import RecipePreviewSearch from "../components/RecipePreviewSearch.vue";
         }
       },
       sortResults(event){
+        if(event.target.value === "likes"){
+          this.recipes = this.sortByLikes;
+        }
+        if(event.target.value === "time"){
+          this.recipes = this.sortByTime;
+        }
       },
 
       async searchFunc(){
         try {
+          this.selectedStatus = "0";
+          this.pageSearch = 0;
           this.updateLastSearchDetails();
           // this.axios.defaults.withCredentials=false;
           //set data acording the user's input
@@ -298,8 +337,9 @@ import RecipePreviewSearch from "../components/RecipePreviewSearch.vue";
           }
           this.recipes = [];
           this.recipes=response.data;
-          // console.log("--------recipes----------")
-          // console.log(this.recipes)
+          return this.recipes;
+          console.log("--------recipes----------")
+          console.log(this.recipes)
           // console.log("-------------------------")
           // localStorage.setItem("lastRecipesRestore", JSON.stringify(response.data));
           // console.log("--------lastRecipesRestore----------")
@@ -312,7 +352,6 @@ import RecipePreviewSearch from "../components/RecipePreviewSearch.vue";
 
           //coockie saveSearch //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-          this.Searchpressed = true;
         } catch (err){
           console.log(err);
         }
@@ -325,6 +364,7 @@ import RecipePreviewSearch from "../components/RecipePreviewSearch.vue";
           cuisine: [],
           diet: [],
           intolerance: [],
+
         };
       },
       
@@ -349,5 +389,31 @@ import RecipePreviewSearch from "../components/RecipePreviewSearch.vue";
   }
   .formResNum{
     width: 14.5%;
+  }
+  .lastSearchForm{
+    height: 100%;
+    width: 100%;
+    padding-left: 35.5%;
+    padding-right: 35.5%;
+    margin-right: 0;
+    margin-left: 0;
+  }
+  .filterRes{
+    height: 100%;
+    width: 100%;
+    padding-left: 35.5%;
+    padding-right: 35.5%;
+    padding-top:5.6%;
+    padding-bottom: 5.6%;
+    margin-right: 0;
+    margin-left: 0;
+  }
+  label{
+    display: inline-block;
+    margin-bottom: 0.63rem;
+    font-weight: bold;
+    /* align-items: center; */
+    /* object-position: center; */
+    padding-left: 20%;
   }
 </style>

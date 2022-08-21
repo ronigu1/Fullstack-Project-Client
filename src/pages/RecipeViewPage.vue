@@ -10,25 +10,26 @@
           <div class="wrapped">
             <div class="mb-3">
               <div>Ready in {{ recipe.readyInMinutes }} minutes</div>
-              <div>Likes: {{ recipe.aggregateLikes }} likes</div>
+              <div>Likes: {{ recipe.popularity }} likes</div>
             </div>
             Ingredients:
             <ul>
               <li
-                v-for="(r, index) in recipe.extendedIngredients"
+                v-for="(r, index) in recipe.ingredients"
                 :key="index + '_' + r.id"
               >
-                {{ r.original }}
+                {{ r.amount }} {{ r.unit }} {{ r.name }}
               </li>
             </ul>
           </div>
           <div class="wrapped">
             Instructions:
-            <ol>
+            <!-- <ol>
               <li v-for="s in recipe._instructions" :key="s.number">
                 {{ s.step }}
               </li>
-            </ol>
+            </ol> -->
+            <p> {{recipe.instructions}}</p>
           </div>
         </div>
       </div>
@@ -69,26 +70,31 @@ export default {
       let {
         analyzedInstructions,
         instructions,
-        extendedIngredients,
-        aggregateLikes,
+        ingredients,
+        popularity,
         readyInMinutes,
         image,
         title
-      } = response.data.recipe;
+      } = response.data;
+      console.log("response.data",response.data);
+// response.data.recipe;
+    let _instructions = instructions;
+    // if( analyzedInstructions){
+    //   let _instructions = analyzedInstructions
+    //     .map((fstep) => {
+    //       fstep.steps[0].step = fstep.name + fstep.steps[0].step;
+    //       return fstep.steps;
+    //     })
+    //     .reduce((a, b) => [...a, ...b], []);
+    // }
 
-      let _instructions = analyzedInstructions
-        .map((fstep) => {
-          fstep.steps[0].step = fstep.name + fstep.steps[0].step;
-          return fstep.steps;
-        })
-        .reduce((a, b) => [...a, ...b], []);
 
       let _recipe = {
         instructions,
         _instructions,
         analyzedInstructions,
-        extendedIngredients,
-        aggregateLikes,
+        ingredients,
+        popularity,
         readyInMinutes,
         image,
         title
