@@ -27,7 +27,7 @@
                 <b-card 
                 style="max-width: 40rem;"
                 border-variant="success"
-                header="PaCovid Website"
+                header="CookieMonster Website"
                 header-bg-variant="success"
                 header-text-variant="white"
                 align="center"
@@ -44,7 +44,7 @@
                 <b-card 
                 style="max-width: 40rem;"
                 border-variant="success"
-                header="Snir's Website"
+                header="Our's Website"
                 header-bg-variant="success"
                 header-text-variant="white"
                 align="center"
