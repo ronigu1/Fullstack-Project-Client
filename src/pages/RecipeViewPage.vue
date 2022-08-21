@@ -48,6 +48,7 @@ export default {
       recipe: null
     };
   },
+
   async created() {
     try {
       let response;
@@ -74,7 +75,8 @@ export default {
         popularity,
         readyInMinutes,
         image,
-        title
+        title,
+        id
       } = response.data;
       console.log("response.data",response.data);
 // response.data.recipe;
@@ -97,13 +99,17 @@ export default {
         popularity,
         readyInMinutes,
         image,
-        title
+        title,
+        id
       };
 
       this.recipe = _recipe;
     } catch (error) {
       console.log(error);
     }
+    if(!(this.$root.store.isWatchedRecipesContainRecepie(this.recipe.id))){
+      this.$root.store.addToWatchedRecipes(this.recipe);   
+   }
   }
 };
 </script>

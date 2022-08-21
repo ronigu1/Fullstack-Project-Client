@@ -126,28 +126,28 @@ export default {
       //   console.log(this.randomRecepies);
       // }
       
-      
-      // try {
-      //   const response = await this.$root.apiRequest.get(
-      //      "/recipes/random",
-      //     // "https://test-for-3-2.herokuapp.com/recipes/random"
-      //   );
+  
+      try {
+        const response = await this.$root.apiRequest.get(
+           "/recipes/random",
+          // "https://test-for-3-2.herokuapp.com/recipes/random"
+        );
 
-      //   console.log(response);
-      //   // const recipes = response.data.recipes;
-      //   const recipes = response.data;   
+        console.log(response);
+        // const recipes = response.data.recipes;
+        const recipes = response.data;   
            
-      //   this.randomRecepies = [];
-      //   this.randomRecepies.push(...recipes);
-      //   // localStorage.setItem("randomRecepies",  JSON.stringify(this.randomRecepies));
-      //   console.log(this.recipes);
+        this.randomRecepies = [];
+        this.randomRecepies.push(...recipes);
+        // localStorage.setItem("randomRecepies",  JSON.stringify(this.randomRecepies));
+        console.log(this.recipes);
         
         
        
-      // } catch (error) {
-      //   console.log(error);
-      // }
-       this.randomRecepies = JSON.parse(localStorage.getItem("randomRecepies"));
+      } catch (error) {
+        console.log(error);
+      }
+      //  this.randomRecepies = JSON.parse(localStorage.getItem("randomRecepies"));
     },
     async updateLastViewdRecepies() {
       if (this.$root.store.username){

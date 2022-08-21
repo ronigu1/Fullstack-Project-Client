@@ -318,9 +318,9 @@
             {
               //query params(after the "?"):
               params: {
-                cuisine: "'"+ this.currentCuisineFilter.toString() +"'",
-                diet: "'"+ this.currentDietFilter.toString() +"'",
-                intolerance: "'"+ this.currentIntoleranceFilter.toString() +"'",
+                cuisine: this.currentCuisineFilter.toString() ,
+                diet: this.currentDietFilter.toString() ,
+                intolerance: this.currentIntoleranceFilter.toString() ,
               },
             },
           );
