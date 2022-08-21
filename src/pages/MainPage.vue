@@ -21,9 +21,10 @@
             </b-button>
           </b-col>
           <b-col v-if="!$root.store.username" cols="6" class="GuestCol">
-                
-                <router-link to="/login"><b-button>Login here</b-button></router-link>
-                <router-link to="/register"><b-button>Register here</b-button></router-link>
+                <b-row class="guestRow">
+                  <router-link to="/login"><b-button>Login here</b-button></router-link>
+                  <router-link to="/register"><b-button>Register here</b-button></router-link>
+                </b-row>
                 <div class="backimg"></div>
                 <!-- <img :class="{blur:true, center:true}" src="../assets/lastViewdRecepiesBackGround.jpg"/> -->
           </b-col>
@@ -166,7 +167,11 @@ export default {
 //     display: flex;
 //     flex-direction: column; 
 // }
-
+.guestRow{
+  display: flex;
+  justify-content: space-around;
+  padding-bottom: 10px;
+}
 .backimg{
     height: 100%;
     background-image: url("../assets/lastViewdRecepiesBackGround.jpg");
