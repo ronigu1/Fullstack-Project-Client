@@ -3,7 +3,9 @@
 This site consists of client and server-side. 
 
 The client can receive recipes randomly, search for specific recipes and to watch full recipes.
-In this project we defined API, and used an external API - spoonacular.
+In this project we design our API using SwaggerHub.
+
+In addition, we used the spoonacular API.
 
 
 -------
